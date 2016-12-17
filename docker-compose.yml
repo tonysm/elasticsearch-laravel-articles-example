@@ -13,10 +13,3 @@ services:
         image: elasticsearch
         ports:
             - 9200:9200
-
-    cli:
-        image: php:7.1-cli
-        volumes:
-            - ./:/usr/src/myapp
-        links:
-            - search

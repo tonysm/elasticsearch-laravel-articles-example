@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('articles.index', ['articles' => App\Article::paginate()]);
+    return view('articles.index', ['articles' => App\Article::all()]);
 });
 
 Route::get('search', function (Elasticsearch\Client $search) {
@@ -23,9 +23,9 @@ Route::get('search', function (Elasticsearch\Client $search) {
         'type' => $instance->getSearchType(),
         'body' => [
             'query' => [
-                'multi_match' => [
+                'query_string' => [
+                    'default_field' => 'body',
                     'query' => request('query'),
-                    'fields' => ['title', 'body'],
                 ],
             ],
         ],
@@ -33,7 +33,7 @@ Route::get('search', function (Elasticsearch\Client $search) {
 
     $ids = array_pluck($searchResult['hits']['hits'], '_id');
 
-    $articles = empty($ids) ? collect() : App\Article::whereIn('id', $ids)->paginate();
+    $articles = empty($ids) ? collect() : App\Article::find($ids);
 
     return view('articles.index', ['articles' => $articles]);
 });

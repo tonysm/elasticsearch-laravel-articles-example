@@ -10,4 +10,8 @@ class Article extends Model
     use Searchable;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'tags' => 'json',
+    ];
 }

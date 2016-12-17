@@ -1,0 +1,22 @@
+version: '2'
+services:
+    web:
+        image: hitalos/laravel
+        stdin_open: true
+        ports:
+            - 8000:80
+        volumes:
+            - ./:/var/www
+        links:
+            - search
+    search:
+        image: elasticsearch
+        ports:
+            - 9200:9200
+
+    cli:
+        image: php:7.1-cli
+        volumes:
+            - ./:/usr/src/myapp
+        links:
+            - search

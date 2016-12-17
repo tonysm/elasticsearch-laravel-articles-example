@@ -12,11 +12,11 @@
 */
 
 Route::get('/', function () {
-    return \App\Article::all();
+    return view('articles.index', ['articles' => App\Article::paginate()]);
 });
 
-Route::get('search', function (\Elasticsearch\Client $search) {
-    $instance = new \App\Article();
+Route::get('search', function (Elasticsearch\Client $search) {
+    $instance = new App\Article();
 
     $searchResult = $search->search([
         'index' => $instance->getSearchIndex(),
@@ -33,9 +33,7 @@ Route::get('search', function (\Elasticsearch\Client $search) {
 
     $ids = array_pluck($searchResult['hits']['hits'], '_id');
 
-    if (empty($ids)) {
-        return response()->json([]);
-    }
+    $articles = empty($ids) ? collect() : App\Article::whereIn('id', $ids)->paginate();
 
-    return \App\Article::find($ids);
+    return view('articles.index', ['articles' => $articles]);
 });

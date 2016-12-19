@@ -25,4 +25,9 @@ trait Searchable
 
         return $this->getTable();
     }
+
+    public function toSearchArray()
+    {
+        return $this->toArray();
+    }
 }

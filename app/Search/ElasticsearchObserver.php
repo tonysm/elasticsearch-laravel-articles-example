@@ -22,7 +22,7 @@ class ElasticsearchObserver
             'index' => $model->getSearchIndex(),
             'type' => $model->getSearchType(),
             'id' => $model->id,
-            'body' => $model->toArray(),
+            'body' => $model->toSearchArray(),
         ]);
     }
 
